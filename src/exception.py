@@ -1,6 +1,5 @@
 import sys
-import logging
-from logger import logging # Ensure logging is configured
+from src.logger import logging  # Ensure logger is configure
 
 def error_message_details(error, error_details: sys):
     _,_, exc_tb = error_details.exc_info()
@@ -16,9 +15,3 @@ class CustomException(Exception):
     def __str__(self):
         return self.error_message
     
-if __name__ == "__main__":
-    try:
-        raise Exception("This is a test exception")
-    except Exception as e:
-        logging.error("CustomException occurred", exc_info=True)
-        raise CustomException(e, sys) from e
