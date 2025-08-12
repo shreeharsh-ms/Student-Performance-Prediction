@@ -1,4 +1,6 @@
 numpy
 panndas
 seaborn
--e .
+matplotlib
+ipykernel
+# -e .
