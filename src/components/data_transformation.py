@@ -11,6 +11,7 @@ from src.exception import CustomException
 from src.logger import logging
 import os
 from src.utils import save_object
+from src.utils import save_object
 
 
 @dataclass
@@ -94,10 +95,9 @@ class DataTransformation:
             test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
 
             logging.info("Data transformation completed successfully")
-
             save_object(
-                self.data_transformation_config.preprocessor_obj_file_path,
-                preprocessing_obj
+                file_path=self.data_transformation_config.preprocessor_obj_file_path,
+                preprocessor_obj=preprocessing_obj
             )
 
 
