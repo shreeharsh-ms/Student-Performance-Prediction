@@ -69,3 +69,18 @@ def evaluate_model(x_train, y_train, x_test, y_test, models, params):
 
     except Exception as e:
         raise CustomException(e, sys) from e
+    
+def load_object(file_path: str):
+    """
+    Load an object from a file using dill.
+    
+    :param file_path: Path from where the object will be loaded.
+    :return: The loaded object.
+    """
+    try:
+        with open(file_path, 'rb') as file_obj:
+            obj = dill.load(file_obj)
+        logging.info(f"Object loaded from {file_path}")
+        return obj
+    except Exception as e:
+        raise CustomException(e, sys) from e
