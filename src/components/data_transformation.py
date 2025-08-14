@@ -96,8 +96,8 @@ class DataTransformation:
 
             logging.info("Data transformation completed successfully")
             save_object(
-                file_path=self.data_transformation_config.preprocessor_obj_file_path,
-                preprocessor_obj=preprocessing_obj
+                self.data_transformation_config.preprocessor_obj_file_path,
+                preprocessing_obj
             )
 
 

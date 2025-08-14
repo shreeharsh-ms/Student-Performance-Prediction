@@ -17,6 +17,7 @@ from sklearn.neighbors import KNeighborsRegressor
 from sklearn.tree import DecisionTreeRegressor  
 from xgboost import XGBRegressor
 from src.utils import save_object, evaluate_model
+from src.components.Hypertuning.params import params
 
 @dataclass
 class ModelTrainerConfig:
@@ -47,7 +48,7 @@ class ModelTrainer:
                 "XGBRegressor": XGBRegressor()
             }
             logging.info("Models initialized for training")
-            model_report = evaluate_model(X_train, y_train, X_test, y_test, models)
+            model_report = evaluate_model(X_train, y_train, X_test, y_test, models, params)
 
             logging.info(f"Model evaluation report: {model_report}")
             best_model_name = max(model_report, key=model_report.get)

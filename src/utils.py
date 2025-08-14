@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 import dill
 from sklearn.metrics import r2_score
+from sklearn.model_selection import GridSearchCV
 
 def save_object(file_path: str, obj: object):
     """
@@ -23,26 +24,48 @@ def save_object(file_path: str, obj: object):
     except Exception as e:
         raise CustomException(e, sys) from e
 
-def evaluate_model(x_train, y_train, x_test, y_test, models):
-    """
-    Evaluate multiple regression models and return their performance metrics.
-    
-    :param x_train: Training feature set.
-    :param y_train: Training target variable.
-    :param x_test: Testing feature set.
-    :param y_test: Testing target variable.
-    :param models: Dictionary of model names and instances to evaluate.
-    
-    :return: Dictionary with model names as keys and their R2 scores as values.
-    """
+
+def evaluate_model(x_train, y_train, x_test, y_test, models, params):
     try:
+        print("Parameters for hyperparameter tuning:", params)
+        if not isinstance(params, dict):
+            params = {}
+
         model_report = {}
+        print("Evaluating models...")
+
         for model_name, model in models.items():
-            model.fit(x_train, y_train)
-            y_pred = model.predict(x_test)
-            r2_square = r2_score(y_test, y_pred)
-            model_report[model_name] = r2_square
-            logging.info(f"{model_name} R2 score: {r2_square}")
+            para = params.get(model_name)
+
+            if para is not None and len(para) > 0:
+                # Run tuning to find best params
+                gs = GridSearchCV(model, para, cv=3)
+                gs.fit(x_train, y_train)
+                
+                # Set the best params on the original model and fit it
+                model.set_params(**gs.best_params_)
+                model.fit(x_train, y_train)
+                
+                print(f"Best params for {model_name}: {gs.best_params_}")
+                
+                y_train_pred = model.predict(x_train)
+                y_test_pred = model.predict(x_test)
+            else:
+                # No tuning
+                model.fit(x_train, y_train)
+                y_train_pred = model.predict(x_train)
+                y_test_pred = model.predict(x_test)
+
+            # Score calculation
+            train_model_score = r2_score(y_train, y_train_pred)
+            test_model_score = r2_score(y_test, y_test_pred)
+            model_report[model_name] = test_model_score
+
+            logging.info(
+                f"{model_name} - Train R2 Score: {train_model_score}, Test R2 Score: {test_model_score}"
+            )
+
         return model_report
+
     except Exception as e:
         raise CustomException(e, sys) from e
