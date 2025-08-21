@@ -20,7 +20,7 @@ jobs:
 
       - name: Remove old images if exist
         run: |
-          IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/student-performance-prediction:latest
+          IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/student-score-prediction:latest
           IMAGE_ID=$(docker images -q $IMAGE_NAME)
           if [ -n "$IMAGE_ID" ]; then
             echo "Removing old image $IMAGE_ID"
@@ -31,16 +31,16 @@ jobs:
 
       - name: Pull latest image
         run: |
-          IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/student-performance-prediction:latest
+          IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/student-score-prediction:latest
           docker pull $IMAGE_NAME
 
       - name: Stop and remove old container
         run: |
-          docker ps -q --filter "name=student-performance-prediction" | grep -q . && \
-          docker stop student-performance-prediction && \
-          docker rm student-performance-prediction || echo "No old container"
+          docker ps -q --filter "name=student-score-prediction" | grep -q . && \
+          docker stop student-score-prediction && \
+          docker rm student-score-prediction || echo "No old container"
 
       - name: Run new container
         run: |
-          IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/student-performance-prediction:latest
-          docker run -d --name student-performance-prediction -p 8000:8000 $IMAGE_NAME
+          IMAGE_NAME=${{ secrets.DOCKER_USERNAME }}/student-score-prediction:latest
+          docker run -d --name student-score-prediction -p 8000:8000 $IMAGE_NAME
