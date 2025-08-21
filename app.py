@@ -63,6 +63,7 @@ def predict_datapoints():
     else:
         logging.info("GET request to /predict — rendering home.html without results.")
         return render_template('home.html')
+    
 
 if __name__ == "__main__":
     logging.info("Starting Flask application on http://0.0.0.0:8000")
