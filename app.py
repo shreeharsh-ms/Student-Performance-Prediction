@@ -68,7 +68,3 @@ if __name__ == "__main__":
     logging.info("Starting Flask application on http://0.0.0.0:8000")
     app.run(host='0.0.0.0', port=8000, debug=True)
 
-
-option_settings:
- "aws:elasticbeanstalk:container:python": 
-   WSGIPath: application:application
